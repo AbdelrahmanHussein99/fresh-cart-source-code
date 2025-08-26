@@ -2,8 +2,13 @@ import React, { useContext } from 'react'
 import styles from "./NavBar.module.css"
 import { Link, useNavigate } from 'react-router-dom'
 import { tokenContext } from '../../context/tokenContext'
+import { useGetCart } from './../../hooks/cartHooks';
+import Badge from '../common/Badge/Badge';
 export default function NavBar() {
-  const { token ,setToken} = useContext(tokenContext)
+  const { token, setToken } = useContext(tokenContext)
+  const { data,isLoading  } = useGetCart()
+  console.log(data);
+  
   const navigate=useNavigate()
   const handleLogout = () => {
     localStorage.removeItem("userToken")
@@ -12,7 +17,7 @@ export default function NavBar() {
   }
   return (
     <>
-    <nav className="navbar navbar-expand-lg bg-light">
+    <nav className="navbar shadow-sm navbar-expand-lg bg-light">
   <div className="container">
     <Link className="navbar-brand" to="/">freshCart</Link>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,10 +46,25 @@ export default function NavBar() {
 
       
       <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-        {token?
+        {token?<>
         <li className="nav-item">
-          <button className="nav-link " aria-current="page"  onClick={handleLogout}>Log out</button>
-        </li>:<>
+          <Link className="nav-link  " aria-current="page" to="/wishlist">Wishlist</Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link  " aria-current="page" to="/cart">
+          <span className="position-relative d-inline-block">
+            <i className="cart text-success fa-solid fa-cart-shopping"></i>
+            {!isLoading && data?.numOfCartItems>0?
+            <Badge numOfCartItems={data.numOfCartItems}/>:<Badge numOfCartItems={0}/>
+            }
+          </span>
+            </Link>
+        </li>
+        <li className="nav-item">
+          <button className="btn nav-link  " aria-current="page"  onClick={handleLogout}>Log out</button>
+        </li>
+        </>
+        :<>
         <li className="nav-item">
           <Link className="nav-link " aria-current="page" to="/register">Register</Link>
         </li>

@@ -1,1 +1,27 @@
-.Cart {}
+/* ✅ Correct (camelCase matches styles.qtyBtn) */
+.qtyBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--main-color);
+  background: white;
+  color: var(--main-color);
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.qtyBtn:hover {
+  background: var(--main-color);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: var(--shadow);
+}
+
+.qtyBtn:active {
+  transform: scale(0.95);
+}

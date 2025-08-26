@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styles from "./Layout.module.css"
-import NavBar from './../navBar/navBar';
+import NavBar from '../NavBar/NavBar';
 import {Outlet} from "react-router-dom"
 import Footer from './../Footer/Footer';
 export default function Layout() {
   return (
     <>
       <NavBar />
-      <Outlet/>
+      <main className="container">
+        <Outlet/>
+      </main>
       <Footer/>
     </>
   )

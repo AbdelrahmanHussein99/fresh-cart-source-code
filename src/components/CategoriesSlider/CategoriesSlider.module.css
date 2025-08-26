@@ -1,0 +1,11 @@
+.CategoriesSlider {}
+
+.slick-slide img {
+  border: none !important;
+  outline: none !important;
+}
+
+#slider {
+  border: none !important;
+  outline: none !important;
+}

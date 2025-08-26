@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { BrowserRouter, createBrowserRouter, RouterProvider } from 'react-router-dom'
+import {  createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './components/Layout/Layout';
 import Home from './components/Home/Home';
 import Products from './components/Products/Products';
@@ -11,6 +11,10 @@ import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import { tokenContext } from './context/tokenContext';
 import ProtectedRoutes from './components/ProtectedRoutes/ProtectedRoutes';
+import AuthProtectedRoutes from './components/AuthProtectedRoutes/AuthProtectedRoutes';
+import ProductDetails from './components/ProductDetails/ProductDetails';
+import { Toaster } from 'react-hot-toast';
+import Wishlist from './components/Wishlist/Wishlist';
 
 export default function App() {
 const{setToken}=useContext(tokenContext)
@@ -23,11 +27,15 @@ const routes=  createBrowserRouter([{
       { index:true, element:<ProtectedRoutes> <Home /></ProtectedRoutes> },
       { path: "home", element:<ProtectedRoutes> <Home /></ProtectedRoutes> },
       { path: "products", element:<ProtectedRoutes> <Products /></ProtectedRoutes> },
+      { path: "productDetails/:id", element:<ProtectedRoutes> <ProductDetails /></ProtectedRoutes> },
       { path: "categories", element:<ProtectedRoutes> <Categories /> </ProtectedRoutes>},
       { path: "cart", element:<ProtectedRoutes> <Cart /> </ProtectedRoutes>},
-      { path: "brands", element:<ProtectedRoutes> <Brands /></ProtectedRoutes> },
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
+      { path: "wishlist", element:<ProtectedRoutes> <Wishlist /> </ProtectedRoutes>},
+    { path: "brands", element: <ProtectedRoutes> <Brands /></ProtectedRoutes> },
+      
+
+      { path: "login", element:<AuthProtectedRoutes> <Login /></AuthProtectedRoutes> },
+      { path: "register", element:<AuthProtectedRoutes> <Register /> </AuthProtectedRoutes>},
 
 
 
@@ -38,6 +46,9 @@ const routes=  createBrowserRouter([{
 }])
 
   return (
-    <RouterProvider router={routes}/>
+    <>
+    <RouterProvider router={routes} />
+      <Toaster position="top-right" reverseOrder={false} />
+      </>
   )
 }
