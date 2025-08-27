@@ -9,19 +9,13 @@ import PriceRating from '../PriceRating/PriceRating'
 import ErrorAlert from '../common/ErrorAlert/ErrorAlert'
 import ProductTitle from './../ProductTitle/ProductTitle';
 import Slider from '../Slider/Slider'
+import { useGetProductById } from '../../hooks/productsHooks'
+
 export default function ProductDetails() {
   const { id } = useParams()
-  
-  async function getProductById(){
-      const { data } = await API.get(`/products/${id}`)
-      return data.data
-  }
-  const { data,isLoading,isError,error } = useQuery({
-    queryKey: ["product", id],
-    queryFn: getProductById,
-    staleTime: 1000 * 60 * 5,
-    gcTime:1000*60*10
-  })
+  const { data,isLoading,isError,error } = useGetProductById(id)
+
+
   if (isLoading) {
     return <LoadingSpinner/>
   }
@@ -42,7 +36,7 @@ export default function ProductDetails() {
           <p className='text-muted'>{data.description}</p>
           <p>{data.category.name}</p>
           <PriceRating price={data.price} rating={data.ratingsAverage}/>
-          <AddToCart/>
+          <AddToCart productId={data._id }/>
         </div>
       </div>
     </>

@@ -3,6 +3,7 @@ import styles from "./CategoriesSlider.module.css"
 import API from '../../api'
 import { useQuery } from '@tanstack/react-query'
 import SliderSlick from 'react-slick'
+import { useGetCategories } from '../../hooks/categoriesHooks'
 
 export default function CategoriesSlider() {
  const settings = {
@@ -15,25 +16,17 @@ export default function CategoriesSlider() {
    autoplaySpeed: 3000,
     arrows:true
   };
-  async function getCategories() {
-    const { data=[] } = await API.get("/categories")
-    return data.data
-  }
-  const { data } = useQuery({
-    queryKey: ["categoiresSlider"],
-    queryFn: getCategories,
-    staleTime: 1000 * 60 * 5,
-    gcTime:1000 * 60 * 10,
-  })
+  const { data } = useGetCategories()
   console.log(data);
+  
   
   return (
     <div id='slider' className='mb-5 '>
-    <h3>Shop Popular Categories</h3>
+    <h3 className='mb-3 heading-underline'>Shop Popular Categories</h3>
     <SliderSlick {...settings}>
         {data?.map((categ) => (
           <div key={categ._id}>
-          <img height={200} className='w-100 mb-2' src={categ.image} alt={categ.name} /> 
+          <img loading='lazy' height={200} className='w-100 mb-2' src={categ.image} alt={categ.name} /> 
           <p>{categ.name}</p>
           </div>
       ))}

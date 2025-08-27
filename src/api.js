@@ -5,3 +5,12 @@ const API = axios.create({
 });
 
 export default API;
+
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage?.getItem("userToken");
+    if (token) config.headers.token = token;
+    return config;
+  },
+  (error) => Promise.reject(error)
+);

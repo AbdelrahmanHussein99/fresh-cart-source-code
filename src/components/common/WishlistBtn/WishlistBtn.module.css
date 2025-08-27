@@ -1,1 +1,8 @@
 .WishlistBtn {}
+
+.wishlistBtn:focus,
+.wishlistBtn:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}

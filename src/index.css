@@ -98,3 +98,29 @@ a:hover {
   /* filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); */
   filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5))
 }
+
+.heading-underline {
+  position: relative;
+  display: inline-block !important;
+  padding-bottom: 10px;
+
+}
+
+.heading-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60%;
+  /* underline width */
+  height: 3px;
+  /* underline thickness */
+  background-color: var(--main-color);
+  border-radius: 2px;
+  transition: width 0.3s ease-in-out;
+}
+
+.heading-underline:hover::after {
+  width: 100%;
+  /* animate underline on hover */
+}

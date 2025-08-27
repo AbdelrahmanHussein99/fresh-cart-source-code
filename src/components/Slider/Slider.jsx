@@ -17,7 +17,7 @@ export default function Slider({imgs=[]}) {
         <SliderSlick {...settings}>
         {imgs.map((img, i) => (
           <div key={i}>
-          <img className='w-100' src={img} alt={`img slider ${i}`} /> 
+          <img loading="lazy" className='w-100' src={img} alt={`img slider ${i}`} /> 
           </div>
       ))}
         </SliderSlick>

@@ -1,24 +1,30 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import styles from "./Wishlist.module.css"
 import ErrorAlert from '../common/ErrorAlert/ErrorAlert'
 import LoadingSpinner from '../common/LoadingSpinner/LoadingSpinner'
 import { useGetWishlist, useRemoveWishlist } from '../../hooks/wishlistHooks'
 import AddToCart from '../common/AddToCart/AddToCart'
+import { Link } from 'react-router-dom'
 export default function Wishlist() {
   const { data, isLoading, isError, error } = useGetWishlist();
-  console.log(data);
-  
-  const { mutate: removeItem, isPending } = useRemoveWishlist()
-   if (isLoading) {
-    return <LoadingSpinner/>
-    }
+
+
+const { mutate: removeItem } = useRemoveWishlist();
+const [removingId, setRemovingId] = useState(null);
+  const handleRemoveWishlist = (id) => {
+    setRemovingId(id)
+    removeItem(id, {
+      onSettled:()=>setRemovingId(null)
+    })
+  }
+  if (isLoading) return <LoadingSpinner />;
     if (isError) {
-        const message = error.response?.data?.message || error.message || "Something went wrong"
-        return <ErrorAlert message={message}/>
-      }
+      const message = error.response?.data?.message || error.message || "Something went wrong"
+      return <ErrorAlert message={message} />;
+  };
   return (
   <div className=" min-vh-100  py-4">
-      <h2 className="fw-bold mb-4">❤️ My Wishlist</h2>
+      <h2 className="fw-bold mb-4 heading-underline">My Wishlist ❤️ </h2>
     {
       data.count ?
       <div className="row g-3">
@@ -48,9 +54,10 @@ export default function Wishlist() {
                     <div className="d-flex mb-3 align-items-center  gap-2">
                       <AddToCart  productId={item._id} />
                     </div>
-                    <button onClick={() => removeItem(item._id)} disabled={isPending} className="btn btn-danger btn-sm d-flex align-items-center gap-1">
-                      <i className="fa-solid fa-trash"></i> {isPending?"Remove...":"Remove"}
+                    <button onClick={() => handleRemoveWishlist(item._id)} disabled={removingId=== item._id} className="btn mb-3 btn-danger btn-sm d-flex align-items-center gap-1">
+                      <i className="fa-solid fa-trash"></i> {removingId=== item._id?"Remove...":"Remove"}
                     </button>
+                    <Link className='btn bg-main w-100 text-white' to={`/productDetails/${item._id}`}>See Details</Link>
                   </div>
                 
                 </div>

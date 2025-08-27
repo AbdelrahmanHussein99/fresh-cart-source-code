@@ -15,6 +15,8 @@ import AuthProtectedRoutes from './components/AuthProtectedRoutes/AuthProtectedR
 import ProductDetails from './components/ProductDetails/ProductDetails';
 import { Toaster } from 'react-hot-toast';
 import Wishlist from './components/Wishlist/Wishlist';
+import CategoryDetails from './components/CategoryDetails/CategoryDetails';
+import BrandDetails from './components/BrandDetails/BrandDetails';
 
 export default function App() {
 const{setToken}=useContext(tokenContext)
@@ -28,6 +30,8 @@ const routes=  createBrowserRouter([{
       { path: "home", element:<ProtectedRoutes> <Home /></ProtectedRoutes> },
       { path: "products", element:<ProtectedRoutes> <Products /></ProtectedRoutes> },
       { path: "productDetails/:id", element:<ProtectedRoutes> <ProductDetails /></ProtectedRoutes> },
+      { path: "categoryDetails/:id", element:<ProtectedRoutes> <CategoryDetails /></ProtectedRoutes> },
+      { path: "brandDetails/:id", element:<ProtectedRoutes> <BrandDetails /></ProtectedRoutes> },
       { path: "categories", element:<ProtectedRoutes> <Categories /> </ProtectedRoutes>},
       { path: "cart", element:<ProtectedRoutes> <Cart /> </ProtectedRoutes>},
       { path: "wishlist", element:<ProtectedRoutes> <Wishlist /> </ProtectedRoutes>},

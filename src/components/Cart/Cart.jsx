@@ -10,7 +10,6 @@ export default function Cart() {
   const { mutate: updateCount } = useUpdateCartItem()
   const { mutate: deleteAll } = useClearAllCart()
   const { mutate: removeItem, isPending } = useRemoveCartItem()
-  console.log(isLoading);
   
   if (isLoading) {
   return <LoadingSpinner/>
@@ -21,7 +20,7 @@ export default function Cart() {
     }
   return (
     <div className=" min-vh-100   py-4">
-      <h2 className="fw-bold mb-4">🛒 My Cart</h2>
+      <h2 className="fw-bold mb-4 heading-underline">My Cart 🛒</h2>
       {data?.numOfCartItems > 0 ? (
         <Fragment>
           <div className="my-4 p-3 shadow-sm rounded-3 bg-light">
@@ -89,7 +88,7 @@ export default function Cart() {
           </div>
         </Fragment>
       
-      ) : <h2 className=' h1 dropShadow text-center text-main fw-bolder'>Cart is etmpy</h2>}
+      ) : <h2 className=' h1 dropShadow text-center text-main fw-bolder'>Cart is empty</h2>}
       
     </div>
   )
