@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from "./CategoryDetails.module.css"
 import { useGetCategoryById } from '../../hooks/categoriesHooks';
 import LoadingSpinner from '../common/LoadingSpinner/LoadingSpinner';
@@ -8,14 +8,18 @@ import ProductTitle from '../ProductTitle/ProductTitle';
 import { useGetSubategoriesOnCategory } from '../../hooks/subcategoryHooks';
 import { useGetProducts } from '../../hooks/productsHooks';
 import ProductCard from '../common/ProductCard/ProductCard';
+import Pagination from '../Pagination/Pagination';
 export default function CategoryDetails() {
   const {id}=useParams()
-  
+  const [page, setPage] = useState(1);
+  const limit = 40
   const { data: category, isLoading, isError, error } = useGetCategoryById(id);
   const { data: subcategory = [] } = useGetSubategoriesOnCategory(id)
-  const { data: products =[]} = useGetProducts();
-  const fliterProductsByCategory = products.filter(product => product.category._id === id);
-  console.log(fliterProductsByCategory);
+  const { data: productsData } = useGetProducts(page,limit);
+  const products = productsData?.data || [];
+  
+  const filterProductsByCategory = products.filter(product => product.category._id === id);
+  console.log(filterProductsByCategory);
   
     if (isLoading) return <LoadingSpinner />;
     if (isError) {
@@ -38,13 +42,16 @@ export default function CategoryDetails() {
           </ul>
         </div>
       </div>
-      {fliterProductsByCategory.length > 0 &&
+      {filterProductsByCategory.length > 0 ? <>
         <div className="row ">
           <div>
             <h2 className='mb-3 heading-underline'>Products</h2>
           </div>
-          {fliterProductsByCategory.map(product => <ProductCard key={product._id} product={product} />)}
-        </div>}
+          {filterProductsByCategory.map(product => <ProductCard key={product._id} product={product} />)}
+        </div>
+        <Pagination totalPages={productsData.metadata.numberOfPages} currentPage={page} onPageChange={setPage} />
+        </>:<h2 className=' h1 dropShadow text-center text-main fw-bolder'>Products coming soon</h2>
+      }
     </>
   )
 }

@@ -1,13 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import API from "../api";
 
-export function useGetProducts() {
+export function useGetProducts(page = 1, limit = 20) {
   return useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", page, limit],
     queryFn: async () => {
-      const { data } = await API.get("/products");
-      return data.data;
+      const { data } = await API.get(`/products?page=${page}&limit=${limit}`);
+      return data;
     },
+    placeholderData: keepPreviousData,
   });
 }
 
