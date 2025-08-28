@@ -17,6 +17,10 @@ import { Toaster } from 'react-hot-toast';
 import Wishlist from './components/Wishlist/Wishlist';
 import CategoryDetails from './components/CategoryDetails/CategoryDetails';
 import BrandDetails from './components/BrandDetails/BrandDetails';
+import UserAddress from './components/UserAddress/UserAddress';
+import AllOrders from './components/AllOrders/AllOrders';
+import CashUserAddress from './components/CashUserAddress/CashUserAddress';
+import ErrorPage from './components/ErrorPage/ErrorPage';
 
 export default function App() {
 const{setToken}=useContext(tokenContext)
@@ -24,7 +28,7 @@ const{setToken}=useContext(tokenContext)
     localStorage.getItem("userToken")&& setToken(localStorage.getItem("userToken"))
   },[])
 const routes=  createBrowserRouter([{
-    path: "/", element: <Layout />, children: [
+    path: "/", element: <Layout />,errorElement: <ErrorPage />, children: [
       
       { index:true, element:<ProtectedRoutes> <Home /></ProtectedRoutes> },
       { path: "home", element:<ProtectedRoutes> <Home /></ProtectedRoutes> },
@@ -35,6 +39,9 @@ const routes=  createBrowserRouter([{
       { path: "categories", element:<ProtectedRoutes> <Categories /> </ProtectedRoutes>},
       { path: "cart", element:<ProtectedRoutes> <Cart /> </ProtectedRoutes>},
       { path: "wishlist", element:<ProtectedRoutes> <Wishlist /> </ProtectedRoutes>},
+      { path: "userAddress", element:<ProtectedRoutes> <UserAddress /> </ProtectedRoutes>},
+      { path: "cashUserAddress", element:<ProtectedRoutes> <CashUserAddress /> </ProtectedRoutes>},
+      { path: "allorders", element:<ProtectedRoutes> <AllOrders /> </ProtectedRoutes>},
     { path: "brands", element: <ProtectedRoutes> <Brands /></ProtectedRoutes> },
       
 

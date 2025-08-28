@@ -4,70 +4,24 @@ import {useFormik} from "formik"
 import * as Yup from 'yup';
 import {  useNavigate } from 'react-router-dom';
 import API from '../../api';
+import {  useRegisterAndLogin } from '../../hooks/authHooks';
+import toast from 'react-hot-toast';
+import ErrorAlert from '../common/ErrorAlert/ErrorAlert';
 export default function Register() {
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const {mutate:Register,isPending,isError,error}=useRegisterAndLogin();
+  
   const navigate=useNavigate()
-  // function validate(values) {
-  //   const errors = {}
-    
-  //   if (!values.name) {
-  //     errors.name="name is required"
-  //   } else if (values.name.length < 6) {
-  //     errors.name="name minimum length is 6"
-  //   } else if (values.name.length > 25) {
-  //     errors.name="name maximum length is 25"
-  //   }
 
-
-  //   if (!values.email) {
-  //     errors.email="email is required"
-  //   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-  //     errors.email="Invalid email address"
-  //   } 
-
-
-  //   if (!values.password) {
-  //     errors.password="password is required"
-  //   } else if (!/^[A-Z][a-z0-9]{5,8}$/i.test(values.password)) {
-  //     errors.password = "Password must start with a capital letter and be 6–9 characters long (letters and numbers only)";
-  //   } 
-
-  //   if (!values.rePassword) {
-  //     errors.rePassword="Please confirm your password"
-  //   } else if (values.rePassword!== values.password) {
-  //     errors.rePassword = "Passwords do not match";
-  //   } 
-  //   if (!values.phone) {
-  //     errors.phone="phone is required"
-  //   } else if (!/^01[0125][0-9]{8}$/i.test(values.phone)) {
-  //     errors.phone = "Invalid phone";
-  //   } 
-
-    
-  //   return errors;
-  // }
   
   async function register(values) {
-
-    try {
-      setErrorMessage('')
-      setIsLoading(true)
-      const {data}= await API.post("/auth/signup",values)
-      console.log(data, "hi formik", values);
-      
-      if (data.message === "success") {
+    Register({url:"signup", values}, {
+      onSuccess: () => {
         navigate("/login");
-      } 
-      
-    } catch (error) {
-      console.error(error);
-      setErrorMessage(error.response?.data?.message || "Something went wrong");
-    } finally {
-      setIsLoading(false)
-    }
-    
+      },
+      onError: (err) => {
+        toast.error(err.message)
+      }
+    })
   }
   const ValidationSchema = Yup.object({
     name: Yup.string()
@@ -100,19 +54,16 @@ export default function Register() {
       
     
   })
+  if (isError) {
+    const message = error.response?.data?.message || error.message || "Something went wrong"
+    return <ErrorAlert message={message}/>
+  }
   return (
     <>
+      <title>Register</title>
       <div className="container my-5">
         <h1> Register</h1>
-        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
         <form className='w-75 mx-auto' onSubmit={formik.handleSubmit}>
-
-          {/* <div className="form-group mb-2">
-            <label htmlFor="name">Name</label>
-            <input type="text"  className='form-control' id='name' onChange={formik.handleChange}
-              name='name' value={formik.values.name} onBlur={formik.handleBlur}/>
-            {formik.touched.name && formik.errors.name ? <div className='alert alert-danger'>{formik.errors.name}</div>:""}
-          </div> */}
           <div className="form-group mb-2">
             <label htmlFor="name">Name</label>
             <input type="text" className='form-control' id='name' name='name'
@@ -144,7 +95,7 @@ export default function Register() {
               {...formik.getFieldProps("phone")} />
             {formik.touched.phone && formik.errors.phone ? <div className='alert alert-danger'>{formik.errors.phone}</div>:""}
           </div>
-          <button disabled={isLoading || !formik.isValid} type='submit' className='btn bg-main text-white ms-auto d-block'>{isLoading?(<><i className='fa fa-spin fa fa-spinner'></i> Registering</>) :"Register" }</button>
+          <button disabled={isPending || !formik.isValid} type='submit' className='btn bg-main text-white ms-auto d-block'>{isPending?(<><i className='fa fa-spin fa fa-spinner'></i> Registering...</>) :"Register" }</button>
         </form>
       </div>
     </>

@@ -5,8 +5,6 @@ export function useGetSubategoriesOnCategory(categoryID) {
     queryKey: ["subcategories", categoryID],
     queryFn: async () => {
       const { data } = await API.get(`/categories/${categoryID}/subcategories`);
-      console.log(data);
-
       return data.data;
     },
     enabled: !!categoryID,

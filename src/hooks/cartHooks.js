@@ -16,7 +16,6 @@ export function useAddToCart() {
   return useMutation({
     mutationFn: async (productId) => {
       const { data } = await API.post("/cart", { productId });
-      console.log(data);
       return data;
     },
     onSuccess: (data) => {
@@ -69,7 +68,6 @@ export function useClearAllCart() {
   return useMutation({
     mutationFn: async () => {
       const data = await API.delete("/cart", { headers: { token } });
-      console.log(data);
       return data;
     },
     onSuccess: () => {

@@ -19,9 +19,8 @@ export default function CategoryDetails() {
   const products = productsData?.data || [];
   
   const filterProductsByCategory = products.filter(product => product.category._id === id);
-  console.log(filterProductsByCategory);
-  
-    if (isLoading) return <LoadingSpinner />;
+
+    if (isLoading) return <LoadingSpinner/>;
     if (isError) {
       const message = error.response?.data?.message || error.message || "Something went wrong"
       return < ErrorAlert message={message}/>

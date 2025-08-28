@@ -5,29 +5,26 @@ import * as Yup from 'yup';
 import {  useNavigate } from 'react-router-dom';
 import { tokenContext } from '../../context/tokenContext';
 import API from '../../api';
+import { useRegisterAndLogin } from '../../hooks/authHooks';
+import toast from 'react-hot-toast';
+import ErrorAlert from '../common/ErrorAlert/ErrorAlert';
 export default function Login() {
-    const [isLoading, setIsLoading] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
+  const {mutate:Login,isPending,isError,error}=useRegisterAndLogin();
   const navigate = useNavigate()
   const{setToken}=useContext(tokenContext)
   async function login(values) {
-    try {
-      setErrorMessage('')
-      setIsLoading(true)
-      const {data}= await API.post("/auth/signin",values)
-      console.log(data, values);
-      if (data.message === "success") {
+    Login({ url: "signin", values }, {
+      onSuccess: (res) => {
+        localStorage.setItem("userToken", res.token)
+        setToken(res.token)
         navigate("/");
-        localStorage.setItem("userToken",data.token)
-        setToken(data.token)
-      } 
-    } catch (error) {
-      console.error(error);
-      setErrorMessage(error.response?.data?.message || "Something went wrong");
-    } finally {
-      setIsLoading(false)
-    }
+      },
+      onError: (err) => {
+        toast.error(err.message)
+      }
+    })
   }
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .required("email is required")
@@ -44,27 +41,29 @@ export default function Login() {
     , validateOnChange: true
     ,onSubmit:(values)=>login(values),
   })
-   return (
+    if (isError) {
+      const message = error.response?.data?.message || error.message || "Something went wrong"
+      return <ErrorAlert message={message}/>
+    }
+  return (
     <>
+      <title>Login</title>
       <div className="container my-5">
         <h1> Login</h1>
-        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
         <form className='w-75 mx-auto' onSubmit={formik.handleSubmit}>
-
-
           <div className="form-group mb-2">
             <label htmlFor="email">E-mail</label>
             <input type="email" className='form-control' id='email' name='email'
               {...formik.getFieldProps("email")} />
-            {formik.touched.email && formik.errors.email ? <div className='alert alert-danger'>{formik.errors.email}</div>:""}
+            {formik.touched.email && formik.errors.email ? <div className='alert alert-danger'>{formik.errors.email}</div> : ""}
           </div>
           <div className="form-group mb-2">
             <label htmlFor="password">Password</label>
             <input type="password" className='form-control' id='password' name='password'
               {...formik.getFieldProps("password")} />
-            {formik.touched.password && formik.errors.password ? <div className='alert alert-danger'>{formik.errors.password}</div>:""}
+            {formik.touched.password && formik.errors.password ? <div className='alert alert-danger'>{formik.errors.password}</div> : ""}
           </div>
-          <button disabled={isLoading || !formik.isValid} type='submit' className='btn bg-main text-white ms-auto d-block'>{isLoading?(<><i className='fa fa-spin fa fa-spinner'></i> Logging in</>) :"login" }</button>
+          <button disabled={isPending || !formik.isValid} type='submit' className='btn bg-main text-white ms-auto d-block'>{isPending ? (<><i className='fa fa-spin fa fa-spinner'></i> Logging in...</>) : "login"}</button>
         </form>
       </div>
     </>

@@ -14,16 +14,19 @@ export default function Brands() {
       return < ErrorAlert message={message}/>
     }
   return (
-    <div className="row">
-      <div>
-        <h2 className='my-3 heading-underline'>Categories</h2>
-      </div>
-      {
-        data.map(brand => (
-          <CategoriesBrandsCard key={brand._id} data={brand} title={"brand"}/>
-        ))
-      }
+    <>
+      <title>Brands</title>
+      <div className="row">
+        <div>
+          <h2 className='my-3 heading-underline'>Categories</h2>
+        </div>
+        {
+          data.map(brand => (
+            <CategoriesBrandsCard key={brand._id} data={brand} title={"brand"} />
+          ))
+        }
     
-    </div>
+      </div>
+    </>
   )
 }

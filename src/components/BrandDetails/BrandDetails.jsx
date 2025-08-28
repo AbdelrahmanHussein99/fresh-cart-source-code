@@ -24,6 +24,7 @@ export default function BrandDetails() {
   };
   return (
     < >
+      <title>{brand.name}</title>
       <div className="row mb-3  py-4  ">
         <div className="col-md-4 bg-secondary-subtle p-2 rounded">
           <img height={300} loading="lazy" src={brand.image} className='w-100 rounded-3' alt={brand.name} />

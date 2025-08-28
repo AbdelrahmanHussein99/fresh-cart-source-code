@@ -8,7 +8,6 @@ import ProductTitle from '../ProductTitle/ProductTitle';
 import CategoriesBrandsCard from '../common/CategoriesBrandsCard/CategoriesBrandsCard';
 export default function Categories() {
   const { data, isLoading, isError, error } = useGetCategories();
-  console.log(data);
   
   if (isLoading) return <LoadingSpinner />;
   if (isError) {
@@ -16,15 +15,18 @@ export default function Categories() {
     return < ErrorAlert message={message}/>
   }
   return (
-    <div className="row">
-      <div>
-        <h2 className='my-3 heading-underline'>Categories</h2>
+    <>
+      <title>Categories</title>
+      <div className="row">
+        <div>
+          <h2 className='my-3 heading-underline'>Categories</h2>
+        </div>
+        {
+          data.map(category => (
+            <CategoriesBrandsCard key={category._id} data={category} title={"category"} />
+          ))
+        }
       </div>
-      {
-        data.map(category => (
-          <CategoriesBrandsCard key={category._id} data={category} title={"category"} />
-        ))
-      }
-    </div>
-  )
+    </>
+  );
 }

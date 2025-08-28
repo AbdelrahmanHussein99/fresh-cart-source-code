@@ -9,7 +9,6 @@ export default function Products() {
   const [page, setPage] = useState(1);
   const limit = 20;
   const { data, isLoading, isError, error } = useGetProducts(page,limit)
-  console.log(data);
     if (isLoading) return <LoadingSpinner/>
   if (isError) {
     const message = error.response?.data?.message || error.message || "Something went wrong"
@@ -17,6 +16,7 @@ export default function Products() {
   }
   return (
     <>
+      <title>Products</title>
       <div className="row">
         <div>
           <h2 className="my-3 heading-underline">Products</h2>

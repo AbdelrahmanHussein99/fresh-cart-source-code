@@ -26,6 +26,8 @@ export default function ProductDetails() {
   }
   return (
     <>
+      <title>{data.title}</title>
+      <meta name="description" content={data.description} />
       <div className="row  py-4 align-items-center">
         <div className="col-md-4">
           <Slider imgs={ data.images}  />

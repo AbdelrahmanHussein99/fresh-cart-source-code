@@ -4,12 +4,15 @@ import { useClearAllCart, useGetCart, useRemoveCartItem, useUpdateCartItem } fro
 import styles from "./Cart.module.css"
 import LoadingSpinner from '../common/LoadingSpinner/LoadingSpinner';
 import ErrorAlert from '../common/ErrorAlert/ErrorAlert';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
   const { data,isLoading,isError,error } = useGetCart();
   const { mutate: updateCount } = useUpdateCartItem()
   const { mutate: deleteAll } = useClearAllCart()
   const { mutate: removeItem, isPending } = useRemoveCartItem()
+  
+  console.log(data);
   
   if (isLoading) {
   return <LoadingSpinner/>
@@ -20,6 +23,7 @@ export default function Cart() {
     }
   return (
     <div className=" min-vh-100   py-4">
+      <title>Cart</title>
       <h2 className="fw-bold mb-4 heading-underline">My Cart 🛒</h2>
       {data?.numOfCartItems > 0 ? (
         <Fragment>
@@ -29,7 +33,12 @@ export default function Cart() {
             <p className="mb-2">
               Total Price: <span className="fw-bold text-success">${data.data.totalCartPrice}</span>
             </p>
-            <button className="btn btn-success w-100 my-1">Proceed to Checkout</button>
+            <Link className='px-2' to={"/cashUserAddress"} state={{ cartId: data.cartId  }}>
+              <button className="btn btn-outline-success w-100 my-1">Proceed to Cash order</button>
+              </Link>
+            <Link className='px-2' to={"/userAddress"} state={{ cartId: data.cartId  }}>
+              <button className="btn btn-success  w-100 my-1">Proceed to Checkout in strip</button>
+              </Link>
             <button onClick={deleteAll} className="btn btn-danger w-100 my-2">Clear all cart</button>
           </div>
         
